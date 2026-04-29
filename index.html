@@ -25,7 +25,7 @@ input[type=text],select{height:22px;font-size:11px;font-family:Arial,Helvetica,s
 input[type=checkbox]{cursor:pointer;width:13px;height:13px}
 
 /* Criteria grid — 12 columns matching the table */
-.crit-grid{display:grid;grid-template-columns:70px 1fr 1fr 80px 70px 60px 60px 1.2fr 56px 2.5fr 50px 44px;column-gap:2px;align-items:end}
+.crit-grid{display:grid;grid-template-columns:70px 1fr 1fr 80px 70px 60px 60px 1.2fr 56px 1.4fr 1fr 68px 50px 44px;column-gap:2px;align-items:end}
 .crit-hdr{font-size:10px;line-height:1.15;text-align:center;padding-bottom:2px;word-break:break-word}
 .crit-hdr.left{text-align:left}
 .crit-cb{display:flex;justify-content:center;align-items:center;padding-top:2px}
@@ -97,7 +97,9 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
       <div class="crit-hdr">ID koda valsts</div>
       <div class="crit-hdr">Identifikācijas kods</div>
       <div class="crit-hdr">Adreses valsts kods</div>
-      <div class="crit-hdr left">Adrese</div>
+      <div class="crit-hdr left">Iela, mājas Nr.</div>
+      <div class="crit-hdr">Pilsēta / pagasts, novads</div>
+      <div class="crit-hdr">Pasta indekss</div>
       <div class="crit-hdr">SED personu radniecība</div>
       <div class="crit-hdr">SED personu adrese</div>
     </div>
@@ -133,7 +135,9 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
           <option>SE</option><option>NO</option><option>FI</option><option>US</option>
         </select>
       </div>
-      <div><input type="text" id="f_adr"   autocomplete="off"></div>
+      <div><input type="text" id="f_iela"    autocomplete="off"></div>
+      <div><input type="text" id="f_pilseta" autocomplete="off"></div>
+      <div><input type="text" id="f_indekss" autocomplete="off"></div>
       <div class="crit-cb"><input type="checkbox" id="f_sedr"></div>
       <div class="crit-cb"><input type="checkbox" id="f_seda"></div>
     </div>
@@ -151,7 +155,9 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
       <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="idv"></div>
       <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="ident" checked></div>
       <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="adrv"></div>
-      <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="adr"></div>
+      <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="iela"></div>
+      <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="pilseta"></div>
+      <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="indekss"></div>
       <div></div><div></div>
     </div>
 
@@ -172,16 +178,16 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
     <div class="res-wrap">
       <table class="res" id="resTable">
         <colgroup>
-          <col style="width:70px"><col style="width:13%"><col style="width:12%">
-          <col style="width:80px"><col style="width:75px"><col style="width:58px"><col style="width:58px">
-          <col style="width:12%"><col style="width:56px"><col><col style="width:50px"><col style="width:44px">
+          <col style="width:70px"><col style="width:12%"><col style="width:11%">
+          <col style="width:78px"><col style="width:72px"><col style="width:56px"><col style="width:56px">
+          <col style="width:11%"><col style="width:54px"><col style="width:13%"><col style="width:11%"><col style="width:66px"><col style="width:48px"><col style="width:42px">
         </colgroup>
         <thead>
           <tr>
             <th>Personas kods</th><th>Uzvārds</th><th>Vārds (i)</th>
             <th>Dzimšanas datums</th><th>Miršanas datums</th><th>Dzimums</th>
             <th>ID koda valsts</th><th>Identifikācijas kods</th>
-            <th>Adreses valsts kods</th><th>Adrese</th>
+            <th>Adreses valsts kods</th><th>Iela, mājas Nr.</th><th>Pilsēta / pagasts, novads</th><th>Pasta indekss</th>
             <th>SED personu radniecība</th><th>SED personu adrese</th>
           </tr>
         </thead>
@@ -259,56 +265,56 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
 <script>
 // ── DATABASE ──────────────────────────────────────────────────────────────
 const DB = [
-  {pkods:"010174-10234",uzv:"BĒRZIŅŠ",vard:"JĀNIS",dzim:"01.01.1974",mir:"",sex:"V",idv:"LV",ident:"LV010174-10234",adrv:"LV",adr:"Rīga, Brīvības iela 45-12",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-456/2024",piet:"A-2024-001",stat:"Aktīvs"},
-  {pkods:"150388-20156",uzv:"KALNIŅA",vard:"ANNA MARIJA",dzim:"15.03.1988",mir:"",sex:"S",idv:"LV",ident:"LV150388-20156",adrv:"LV",adr:"Jūrmala, Jūras iela 7",sedr:false,seda:false,dz:"Jelgava",tau:"Latvija",lieta:"L-789/2024",piet:"A-2024-002",stat:"Aktīvs"},
-  {pkods:"221265-11048",uzv:"LIEPIŅŠ",vard:"PĒTERIS",dzim:"22.12.1965",mir:"",sex:"V",idv:"LV",ident:"LV221265-11048",adrv:"LV",adr:"Liepāja, Graudu iela 3-5",sedr:true,seda:false,dz:"Liepāja",tau:"Latvija",lieta:"L-123/2023",piet:"A-2023-089",stat:"Slēgts"},
-  {pkods:"070592-21234",uzv:"OZOLA",vard:"SANTA",dzim:"07.05.1992",mir:"",sex:"S",idv:"LV",ident:"LV070592-21234",adrv:"DE",adr:"Berlin, Hauptstraße 101",sedr:false,seda:true,dz:"Valmiera",tau:"Latvija",lieta:"L-321/2024",piet:"A-2024-045",stat:"Aktīvs"},
-  {pkods:"301178-10567",uzv:"ZARIŅŠ",vard:"MĀRTIŅŠ",dzim:"30.11.1978",mir:"",sex:"V",idv:"LV",ident:"LV301178-10567",adrv:"LV",adr:"Daugavpils, Vienības iela 22",sedr:false,seda:false,dz:"Daugavpils",tau:"Latvija",lieta:"L-654/2024",piet:"B-2024-012",stat:"Aktīvs"},
-  {pkods:"180460-10023",uzv:"ĀBOLIŅŠ",vard:"IMANTS",dzim:"18.04.1960",mir:"12.06.2019",sex:"V",idv:"LV",ident:"LV180460-10023",adrv:"LV",adr:"Ventspils, Tirgus iela 5",sedr:false,seda:false,dz:"Ventspils",tau:"Latvija",lieta:"L-900/2019",piet:"A-2019-077",stat:"Slēgts"},
-  {pkods:"250895-22301",uzv:"KRŪMIŅA",vard:"LAURA",dzim:"25.08.1995",mir:"",sex:"S",idv:"LV",ident:"LV250895-22301",adrv:"GB",adr:"London, Baker Street 221B",sedr:false,seda:true,dz:"Rīga",tau:"Latvija",lieta:"L-111/2024",piet:"C-2024-003",stat:"Aktīvs"},
-  {pkods:"110283-11789",uzv:"OZOLIŅŠ",vard:"KĀRLIS",dzim:"11.02.1983",mir:"",sex:"V",idv:"EE",ident:"EE11028311789",adrv:"EE",adr:"Tallinn, Viru väljak 4",sedr:true,seda:true,dz:"Valmiera",tau:"Latvija",lieta:"L-555/2023",piet:"A-2023-200",stat:"Aktīvs"},
-  {pkods:"040501-21098",uzv:"SILIŅA",vard:"KRISTĪNE ILZE",dzim:"04.05.2001",mir:"",sex:"S",idv:"LV",ident:"LV040501-21098",adrv:"LV",adr:"Rīga, Čaka iela 71-3",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-222/2024",piet:"D-2024-008",stat:"Aktīvs"},
-  {pkods:"160770-10345",uzv:"PAULIŅŠ",vard:"VLADIMIRS",dzim:"16.07.1970",mir:"",sex:"V",idv:"LV",ident:"LV160770-10345",adrv:"LV",adr:"Rīga, Maskavas iela 240",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-888/2022",piet:"A-2022-150",stat:"Aktīvs"},
-  {pkods:"290367-11204",uzv:"SKUJA",vard:"AIVARS",dzim:"29.03.1967",mir:"",sex:"V",idv:"LV",ident:"LV290367-11204",adrv:"LV",adr:"Ogre, Brīvības iela 14",sedr:false,seda:false,dz:"Ogre",tau:"Latvija",lieta:"L-333/2023",piet:"B-2023-044",stat:"Aktīvs"},
-  {pkods:"120956-10811",uzv:"FREIBERGA",vard:"VAIRA",dzim:"12.09.1956",mir:"",sex:"S",idv:"LV",ident:"LV120956-10811",adrv:"LV",adr:"Rīga, Eksporta iela 1",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-001/2022",piet:"A-2022-001",stat:"Aktīvs"},
-  {pkods:"031299-21450",uzv:"DĀVIDSONS",vard:"ROBERTS",dzim:"03.12.1999",mir:"",sex:"V",idv:"LV",ident:"LV031299-21450",adrv:"LV",adr:"Cēsis, Rīgas iela 22",sedr:false,seda:false,dz:"Cēsis",tau:"Latvija",lieta:"L-445/2024",piet:"C-2024-011",stat:"Aktīvs"},
-  {pkods:"050780-10099",uzv:"BERGMANIS",vard:"JURIS EDGARS",dzim:"05.07.1980",mir:"",sex:"V",idv:"LV",ident:"LV050780-10099",adrv:"LV",adr:"Jelgava, Pasta iela 3",sedr:true,seda:false,dz:"Jelgava",tau:"Latvija",lieta:"L-777/2023",piet:"B-2023-099",stat:"Aktīvs"},
-  {pkods:"230693-22015",uzv:"MIHAILOVA",vard:"NATALJA",dzim:"23.06.1993",mir:"",sex:"S",idv:"RU",ident:"RU9304123456",adrv:"LV",adr:"Rīga, Dzirnavu iela 55-8",sedr:false,seda:false,dz:"Maskava",tau:"Krievija",lieta:"L-234/2024",piet:"A-2024-088",stat:"Aktīvs"},
-  {pkods:"071085-11234",uzv:"JANSONS",vard:"GUNTIS",dzim:"07.10.1985",mir:"",sex:"V",idv:"LV",ident:"LV071085-11234",adrv:"LV",adr:"Rēzekne, Atbrīvošanas aleja 12",sedr:false,seda:false,dz:"Rēzekne",tau:"Latvija",lieta:"L-566/2024",piet:"B-2024-030",stat:"Aktīvs"},
-  {pkods:"140272-10567",uzv:"VĪTOLIŅŠ",vard:"ALDIS",dzim:"14.02.1972",mir:"",sex:"V",idv:"LV",ident:"LV140272-10567",adrv:"DE",adr:"Hamburg, Reeperbahn 7",sedr:true,seda:true,dz:"Kuldīga",tau:"Latvija",lieta:"L-099/2023",piet:"A-2023-055",stat:"Aktīvs"},
-  {pkods:"280990-21890",uzv:"PETERSONE",vard:"ILZE",dzim:"28.09.1990",mir:"",sex:"S",idv:"LV",ident:"LV280990-21890",adrv:"LV",adr:"Sigulda, Pils iela 6",sedr:false,seda:false,dz:"Sigulda",tau:"Latvija",lieta:"L-678/2024",piet:"D-2024-019",stat:"Aktīvs"},
-  {pkods:"091163-10034",uzv:"ĀBRAMS",vard:"MĀRIS",dzim:"09.11.1963",mir:"05.02.2021",sex:"V",idv:"LV",ident:"LV091163-10034",adrv:"LV",adr:"Liepāja, Kuršu iela 18",sedr:false,seda:false,dz:"Liepāja",tau:"Latvija",lieta:"L-500/2021",piet:"A-2021-040",stat:"Slēgts"},
-  {pkods:"160204-22345",uzv:"DZENE",vard:"SINTIJA",dzim:"16.02.2004",mir:"",sex:"S",idv:"LV",ident:"LV160204-22345",adrv:"LV",adr:"Rīga, Tērbatas iela 9-2",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-801/2024",piet:"E-2024-005",stat:"Aktīvs"},
-  {pkods:"220869-11456",uzv:"KOVAĻEVSKIS",vard:"ANDREJS",dzim:"22.08.1969",mir:"",sex:"V",idv:"LV",ident:"LV220869-11456",adrv:"PL",adr:"Warszawa, ul. Marszałkowska 55",sedr:false,seda:true,dz:"Daugavpils",tau:"Latvija",lieta:"L-150/2024",piet:"C-2024-022",stat:"Aktīvs"},
-  {pkods:"030796-21007",uzv:"TĀLBERGA",vard:"KRISTĪNE",dzim:"03.07.1996",mir:"",sex:"S",idv:"LV",ident:"LV030796-21007",adrv:"LV",adr:"Valmiera, Rīgas iela 45",sedr:false,seda:false,dz:"Valmiera",tau:"Latvija",lieta:"L-362/2023",piet:"B-2023-077",stat:"Aktīvs"},
-  {pkods:"121258-10123",uzv:"SPROĢIS",vard:"PAULS",dzim:"12.12.1958",mir:"19.11.2022",sex:"V",idv:"LV",ident:"LV121258-10123",adrv:"LV",adr:"Tukums, Pils iela 4",sedr:false,seda:false,dz:"Tukums",tau:"Latvija",lieta:"L-210/2022",piet:"A-2022-088",stat:"Slēgts"},
-  {pkods:"180487-11678",uzv:"NIEDRA",vard:"INGUS",dzim:"18.04.1987",mir:"",sex:"V",idv:"LV",ident:"LV180487-11678",adrv:"LV",adr:"Rīga, Āgenskalna iela 23",sedr:true,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-489/2024",piet:"A-2024-066",stat:"Aktīvs"},
-  {pkods:"250101-21234",uzv:"VILCIŅA",vard:"MARTA ELĪNA",dzim:"25.01.2001",mir:"",sex:"S",idv:"LV",ident:"LV250101-21234",adrv:"LV",adr:"Jēkabpils, Rīgas iela 7",sedr:false,seda:false,dz:"Jēkabpils",tau:"Latvija",lieta:"L-603/2024",piet:"D-2024-031",stat:"Aktīvs"},
-  {pkods:"060975-10890",uzv:"SONDORS",vard:"ULDIS",dzim:"06.09.1975",mir:"",sex:"V",idv:"LV",ident:"LV060975-10890",adrv:"SE",adr:"Stockholm, Drottninggatan 18",sedr:false,seda:true,dz:"Ventspils",tau:"Latvija",lieta:"L-744/2023",piet:"C-2023-088",stat:"Aktīvs"},
-  {pkods:"140382-20456",uzv:"CELMIŅA",vard:"DACE INGRĪDA",dzim:"14.03.1982",mir:"",sex:"S",idv:"LV",ident:"LV140382-20456",adrv:"LV",adr:"Rīga, Tallinas iela 14-6",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-288/2024",piet:"B-2024-044",stat:"Aktīvs"},
-  {pkods:"310768-11023",uzv:"KALĒJS",vard:"VIESTURS",dzim:"31.07.1968",mir:"",sex:"V",idv:"LV",ident:"LV310768-11023",adrv:"LV",adr:"Bauska, Uzvaras iela 3",sedr:false,seda:false,dz:"Bauska",tau:"Latvija",lieta:"L-911/2022",piet:"A-2022-200",stat:"Aktīvs"},
-  {pkods:"020594-22789",uzv:"STRAZDIŅA",vard:"EVITA",dzim:"02.05.1994",mir:"",sex:"S",idv:"LV",ident:"LV020594-22789",adrv:"NO",adr:"Oslo, Karl Johans gate 1",sedr:true,seda:true,dz:"Sigulda",tau:"Latvija",lieta:"L-122/2024",piet:"E-2024-012",stat:"Aktīvs"},
-  {pkods:"170879-10345",uzv:"LIEĢIS",vard:"EDGARS",dzim:"17.08.1979",mir:"",sex:"V",idv:"LV",ident:"LV170879-10345",adrv:"LV",adr:"Dobele, Brīvības iela 8",sedr:false,seda:false,dz:"Dobele",tau:"Latvija",lieta:"L-399/2023",piet:"B-2023-120",stat:"Aktīvs"},
-  {pkods:"250676-20988",uzv:"ROZENTĀLE",vard:"LIGA",dzim:"25.06.1976",mir:"",sex:"S",idv:"LV",ident:"LV250676-20988",adrv:"LV",adr:"Rīga, Elizabetes iela 22-4",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-077/2024",piet:"A-2024-099",stat:"Aktīvs"},
-  {pkods:"091091-11567",uzv:"APINIS",vard:"GATIS",dzim:"09.10.1991",mir:"",sex:"V",idv:"LV",ident:"LV091091-11567",adrv:"LV",adr:"Ogre, Meža iela 5",sedr:false,seda:false,dz:"Ogre",tau:"Latvija",lieta:"L-534/2024",piet:"C-2024-055",stat:"Aktīvs"},
-  {pkods:"150563-10012",uzv:"GRĪNBERGS",vard:"LEONĪDS",dzim:"15.05.1963",mir:"",sex:"V",idv:"LV",ident:"LV150563-10012",adrv:"LV",adr:"Rīga, Valdemāra iela 67",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-200/2022",piet:"A-2022-044",stat:"Aktīvs"},
-  {pkods:"040289-21901",uzv:"ĀBOLTIŅA",vard:"SARMĪTE",dzim:"04.02.1989",mir:"",sex:"S",idv:"LV",ident:"LV040289-21901",adrv:"FI",adr:"Helsinki, Mannerheimintie 12",sedr:false,seda:true,dz:"Cēsis",tau:"Latvija",lieta:"L-655/2023",piet:"C-2023-040",stat:"Aktīvs"},
-  {pkods:"280171-10678",uzv:"VECKĀGANS",vard:"JĀNIS PĒTERIS",dzim:"28.01.1971",mir:"",sex:"V",idv:"LV",ident:"LV280171-10678",adrv:"LV",adr:"Kuldīga, Pilsētas laukums 1",sedr:true,seda:false,dz:"Kuldīga",tau:"Latvija",lieta:"L-308/2024",piet:"B-2024-067",stat:"Aktīvs"},
-  {pkods:"190998-21123",uzv:"OZOLIŅA",vard:"RŪTA",dzim:"19.09.1998",mir:"",sex:"S",idv:"LV",ident:"LV190998-21123",adrv:"LV",adr:"Jelgava, Akadēmijas iela 19",sedr:false,seda:false,dz:"Jelgava",tau:"Latvija",lieta:"L-412/2024",piet:"D-2024-041",stat:"Aktīvs"},
-  {pkods:"230861-10456",uzv:"LAZDIŅŠ",vard:"IMANTS",dzim:"23.08.1961",mir:"30.04.2020",sex:"V",idv:"LV",ident:"LV230861-10456",adrv:"LV",adr:"Ventspils, Lielā iela 9",sedr:false,seda:false,dz:"Ventspils",tau:"Latvija",lieta:"L-099/2020",piet:"A-2020-033",stat:"Slēgts"},
-  {pkods:"110387-22034",uzv:"GRĀVERE",vard:"ANITA SANDRA",dzim:"11.03.1987",mir:"",sex:"S",idv:"LV",ident:"LV110387-22034",adrv:"LV",adr:"Rīga, Ķīpsalas iela 8-2",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-741/2024",piet:"A-2024-111",stat:"Aktīvs"},
-  {pkods:"070477-10901",uzv:"BRAUNS",vard:"HARIJS",dzim:"07.04.1977",mir:"",sex:"V",idv:"LV",ident:"LV070477-10901",adrv:"GB",adr:"London, Oxford Street 100",sedr:false,seda:true,dz:"Rīga",tau:"Latvija",lieta:"L-188/2023",piet:"C-2023-018",stat:"Aktīvs"},
-  {pkods:"021202-21567",uzv:"TIMMA",vard:"KRISTAPS",dzim:"02.12.2002",mir:"",sex:"V",idv:"LV",ident:"LV021202-21567",adrv:"LV",adr:"Rīga, Sporta iela 2",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-920/2024",piet:"E-2024-020",stat:"Aktīvs"},
-  {pkods:"160584-11234",uzv:"HANSONS",vard:"UĢIS",dzim:"16.05.1984",mir:"",sex:"V",idv:"LV",ident:"LV160584-11234",adrv:"LV",adr:"Salaspils, Miera iela 12",sedr:false,seda:false,dz:"Salaspils",tau:"Latvija",lieta:"L-667/2023",piet:"B-2023-088",stat:"Aktīvs"},
-  {pkods:"250369-20123",uzv:"KĻAVIŅA",vard:"MĀRA",dzim:"25.03.1969",mir:"",sex:"S",idv:"LV",ident:"LV250369-20123",adrv:"LV",adr:"Daugavpils, Rīgas iela 88",sedr:true,seda:false,dz:"Daugavpils",tau:"Latvija",lieta:"L-230/2024",piet:"A-2024-130",stat:"Aktīvs"},
-  {pkods:"130895-11789",uzv:"LĀCIS",vard:"REINIS",dzim:"13.08.1995",mir:"",sex:"V",idv:"LV",ident:"LV130895-11789",adrv:"LV",adr:"Rīga, Āzenes iela 3",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-456/2023",piet:"B-2023-156",stat:"Aktīvs"},
-  {pkods:"200178-10234",uzv:"RUBENIS",vard:"NORMUNDS",dzim:"20.01.1978",mir:"",sex:"V",idv:"LV",ident:"LV200178-10234",adrv:"LV",adr:"Rīga, Ganību dambis 5",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-344/2024",piet:"A-2024-155",stat:"Aktīvs"},
-  {pkods:"051092-21678",uzv:"BERNĀTE",vard:"ELĪNA",dzim:"05.10.1992",mir:"",sex:"S",idv:"LV",ident:"LV051092-21678",adrv:"LT",adr:"Vilnius, Gedimino pr. 15",sedr:false,seda:true,dz:"Rīga",tau:"Latvija",lieta:"L-188/2024",piet:"C-2024-038",stat:"Aktīvs"},
-  {pkods:"170865-10567",uzv:"PLŪME",vard:"ANDRIS",dzim:"17.08.1965",mir:"",sex:"V",idv:"LV",ident:"LV170865-10567",adrv:"LV",adr:"Saldus, Striķu iela 7",sedr:false,seda:false,dz:"Saldus",tau:"Latvija",lieta:"L-511/2022",piet:"A-2022-177",stat:"Aktīvs"},
-  {pkods:"020403-22890",uzv:"GAILE",vard:"LĀSMA",dzim:"02.04.2003",mir:"",sex:"S",idv:"LV",ident:"LV020403-22890",adrv:"LV",adr:"Rīga, Meistaru iela 19",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-780/2024",piet:"D-2024-050",stat:"Aktīvs"},
-  {pkods:"110679-10789",uzv:"BALODIS",vard:"JĀNIS ULDIS",dzim:"11.06.1979",mir:"",sex:"V",idv:"LV",ident:"LV110679-10789",adrv:"LV",adr:"Rīga, Daugavgrīvas iela 31",sedr:true,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-422/2024",piet:"B-2024-079",stat:"Aktīvs"},
-  {pkods:"290186-21345",uzv:"ĀBOLKALNE",vard:"VITA",dzim:"29.01.1986",mir:"",sex:"S",idv:"LV",ident:"LV290186-21345",adrv:"LV",adr:"Limbāži, Rīgas iela 2",sedr:false,seda:false,dz:"Limbāži",tau:"Latvija",lieta:"L-614/2023",piet:"A-2023-199",stat:"Aktīvs"},
-  {pkods:"030574-10456",uzv:"ZELTKALNS",vard:"MĀRIS",dzim:"03.05.1974",mir:"",sex:"V",idv:"LV",ident:"LV030574-10456",adrv:"LV",adr:"Jūrmala, Mellužu prospekts 22",sedr:false,seda:false,dz:"Jūrmala",tau:"Latvija",lieta:"L-055/2024",piet:"A-2024-178",stat:"Aktīvs"},
+  {pkods:"010174-10234",uzv:"BĒRZIŅŠ",vard:"JĀNIS",dzim:"01.01.1974",mir:"",sex:"V",idv:"LV",ident:"LV010174-10234",adrv:"LV",iela:"Brīvības iela 45-12",pilseta:"Rīga",indekss:"LV-1010",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-456/2024",piet:"A-2024-001",stat:"Aktīvs"},
+  {pkods:"150388-20156",uzv:"KALNIŅA",vard:"ANNA MARIJA",dzim:"15.03.1988",mir:"",sex:"S",idv:"LV",ident:"LV150388-20156",adrv:"LV",iela:"Jūras iela 7",pilseta:"Jūrmala",indekss:"LV-2015",sedr:false,seda:false,dz:"Jelgava",tau:"Latvija",lieta:"L-789/2024",piet:"A-2024-002",stat:"Aktīvs"},
+  {pkods:"221265-11048",uzv:"LIEPIŅŠ",vard:"PĒTERIS",dzim:"22.12.1965",mir:"",sex:"V",idv:"LV",ident:"LV221265-11048",adrv:"LV",iela:"Graudu iela 3-5",pilseta:"Liepāja",indekss:"LV-3401",sedr:true,seda:false,dz:"Liepāja",tau:"Latvija",lieta:"L-123/2023",piet:"A-2023-089",stat:"Slēgts"},
+  {pkods:"070592-21234",uzv:"OZOLA",vard:"SANTA",dzim:"07.05.1992",mir:"",sex:"S",idv:"LV",ident:"LV070592-21234",adrv:"DE",iela:"Hauptstraße 101",pilseta:"Berlin",indekss:"10115",sedr:false,seda:true,dz:"Valmiera",tau:"Latvija",lieta:"L-321/2024",piet:"A-2024-045",stat:"Aktīvs"},
+  {pkods:"301178-10567",uzv:"ZARIŅŠ",vard:"MĀRTIŅŠ",dzim:"30.11.1978",mir:"",sex:"V",idv:"LV",ident:"LV301178-10567",adrv:"LV",iela:"Vienības iela 22",pilseta:"Daugavpils",indekss:"LV-5401",sedr:false,seda:false,dz:"Daugavpils",tau:"Latvija",lieta:"L-654/2024",piet:"B-2024-012",stat:"Aktīvs"},
+  {pkods:"180460-10023",uzv:"ĀBOLIŅŠ",vard:"IMANTS",dzim:"18.04.1960",mir:"12.06.2019",sex:"V",idv:"LV",ident:"LV180460-10023",adrv:"LV",iela:"Tirgus iela 5",pilseta:"Ventspils",indekss:"LV-3601",sedr:false,seda:false,dz:"Ventspils",tau:"Latvija",lieta:"L-900/2019",piet:"A-2019-077",stat:"Slēgts"},
+  {pkods:"250895-22301",uzv:"KRŪMIŅA",vard:"LAURA",dzim:"25.08.1995",mir:"",sex:"S",idv:"LV",ident:"LV250895-22301",adrv:"GB",iela:"Baker Street 221B",pilseta:"London",indekss:"NW1 6XE",sedr:false,seda:true,dz:"Rīga",tau:"Latvija",lieta:"L-111/2024",piet:"C-2024-003",stat:"Aktīvs"},
+  {pkods:"110283-11789",uzv:"OZOLIŅŠ",vard:"KĀRLIS",dzim:"11.02.1983",mir:"",sex:"V",idv:"EE",ident:"EE11028311789",adrv:"EE",iela:"Viru väljak 4",pilseta:"Tallinn",indekss:"10111",sedr:true,seda:true,dz:"Valmiera",tau:"Latvija",lieta:"L-555/2023",piet:"A-2023-200",stat:"Aktīvs"},
+  {pkods:"040501-21098",uzv:"SILIŅA",vard:"KRISTĪNE ILZE",dzim:"04.05.2001",mir:"",sex:"S",idv:"LV",ident:"LV040501-21098",adrv:"LV",iela:"Čaka iela 71-3",pilseta:"Rīga",indekss:"LV-1011",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-222/2024",piet:"D-2024-008",stat:"Aktīvs"},
+  {pkods:"160770-10345",uzv:"PAULIŅŠ",vard:"VLADIMIRS",dzim:"16.07.1970",mir:"",sex:"V",idv:"LV",ident:"LV160770-10345",adrv:"LV",iela:"Maskavas iela 240",pilseta:"Rīga",indekss:"LV-1063",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-888/2022",piet:"A-2022-150",stat:"Aktīvs"},
+  {pkods:"290367-11204",uzv:"SKUJA",vard:"AIVARS",dzim:"29.03.1967",mir:"",sex:"V",idv:"LV",ident:"LV290367-11204",adrv:"LV",iela:"Brīvības iela 14",pilseta:"Ogre",indekss:"LV-5001",sedr:false,seda:false,dz:"Ogre",tau:"Latvija",lieta:"L-333/2023",piet:"B-2023-044",stat:"Aktīvs"},
+  {pkods:"120956-10811",uzv:"FREIBERGA",vard:"VAIRA",dzim:"12.09.1956",mir:"",sex:"S",idv:"LV",ident:"LV120956-10811",adrv:"LV",iela:"Eksporta iela 1",pilseta:"Rīga",indekss:"LV-1010",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-001/2022",piet:"A-2022-001",stat:"Aktīvs"},
+  {pkods:"031299-21450",uzv:"DĀVIDSONS",vard:"ROBERTS",dzim:"03.12.1999",mir:"",sex:"V",idv:"LV",ident:"LV031299-21450",adrv:"LV",iela:"Rīgas iela 22",pilseta:"Cēsis",indekss:"LV-4101",sedr:false,seda:false,dz:"Cēsis",tau:"Latvija",lieta:"L-445/2024",piet:"C-2024-011",stat:"Aktīvs"},
+  {pkods:"050780-10099",uzv:"BERGMANIS",vard:"JURIS EDGARS",dzim:"05.07.1980",mir:"",sex:"V",idv:"LV",ident:"LV050780-10099",adrv:"LV",iela:"Pasta iela 3",pilseta:"Jelgava",indekss:"LV-3001",sedr:true,seda:false,dz:"Jelgava",tau:"Latvija",lieta:"L-777/2023",piet:"B-2023-099",stat:"Aktīvs"},
+  {pkods:"230693-22015",uzv:"MIHAILOVA",vard:"NATALJA",dzim:"23.06.1993",mir:"",sex:"S",idv:"RU",ident:"RU9304123456",adrv:"LV",iela:"Dzirnavu iela 55-8",pilseta:"Rīga",indekss:"LV-1010",sedr:false,seda:false,dz:"Maskava",tau:"Krievija",lieta:"L-234/2024",piet:"A-2024-088",stat:"Aktīvs"},
+  {pkods:"071085-11234",uzv:"JANSONS",vard:"GUNTIS",dzim:"07.10.1985",mir:"",sex:"V",idv:"LV",ident:"LV071085-11234",adrv:"LV",iela:"Atbrīvošanas aleja 12",pilseta:"Rēzekne",indekss:"LV-4601",sedr:false,seda:false,dz:"Rēzekne",tau:"Latvija",lieta:"L-566/2024",piet:"B-2024-030",stat:"Aktīvs"},
+  {pkods:"140272-10567",uzv:"VĪTOLIŅŠ",vard:"ALDIS",dzim:"14.02.1972",mir:"",sex:"V",idv:"LV",ident:"LV140272-10567",adrv:"DE",iela:"Reeperbahn 7",pilseta:"Hamburg",indekss:"20359",sedr:true,seda:true,dz:"Kuldīga",tau:"Latvija",lieta:"L-099/2023",piet:"A-2023-055",stat:"Aktīvs"},
+  {pkods:"280990-21890",uzv:"PETERSONE",vard:"ILZE",dzim:"28.09.1990",mir:"",sex:"S",idv:"LV",ident:"LV280990-21890",adrv:"LV",iela:"Pils iela 6",pilseta:"Sigulda",indekss:"LV-2150",sedr:false,seda:false,dz:"Sigulda",tau:"Latvija",lieta:"L-678/2024",piet:"D-2024-019",stat:"Aktīvs"},
+  {pkods:"091163-10034",uzv:"ĀBRAMS",vard:"MĀRIS",dzim:"09.11.1963",mir:"05.02.2021",sex:"V",idv:"LV",ident:"LV091163-10034",adrv:"LV",iela:"Kuršu iela 18",pilseta:"Liepāja",indekss:"LV-3401",sedr:false,seda:false,dz:"Liepāja",tau:"Latvija",lieta:"L-500/2021",piet:"A-2021-040",stat:"Slēgts"},
+  {pkods:"160204-22345",uzv:"DZENE",vard:"SINTIJA",dzim:"16.02.2004",mir:"",sex:"S",idv:"LV",ident:"LV160204-22345",adrv:"LV",iela:"Tērbatas iela 9-2",pilseta:"Rīga",indekss:"LV-1011",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-801/2024",piet:"E-2024-005",stat:"Aktīvs"},
+  {pkods:"220869-11456",uzv:"KOVAĻEVSKIS",vard:"ANDREJS",dzim:"22.08.1969",mir:"",sex:"V",idv:"LV",ident:"LV220869-11456",adrv:"PL",iela:"ul. Marszałkowska 55",pilseta:"Warszawa",indekss:"00-693",sedr:false,seda:true,dz:"Daugavpils",tau:"Latvija",lieta:"L-150/2024",piet:"C-2024-022",stat:"Aktīvs"},
+  {pkods:"030796-21007",uzv:"TĀLBERGA",vard:"KRISTĪNE",dzim:"03.07.1996",mir:"",sex:"S",idv:"LV",ident:"LV030796-21007",adrv:"LV",iela:"Rīgas iela 45",pilseta:"Valmiera",indekss:"LV-4201",sedr:false,seda:false,dz:"Valmiera",tau:"Latvija",lieta:"L-362/2023",piet:"B-2023-077",stat:"Aktīvs"},
+  {pkods:"121258-10123",uzv:"SPROĢIS",vard:"PAULS",dzim:"12.12.1958",mir:"19.11.2022",sex:"V",idv:"LV",ident:"LV121258-10123",adrv:"LV",iela:"Pils iela 4",pilseta:"Tukums",indekss:"LV-3101",sedr:false,seda:false,dz:"Tukums",tau:"Latvija",lieta:"L-210/2022",piet:"A-2022-088",stat:"Slēgts"},
+  {pkods:"180487-11678",uzv:"NIEDRA",vard:"INGUS",dzim:"18.04.1987",mir:"",sex:"V",idv:"LV",ident:"LV180487-11678",adrv:"LV",iela:"Āgenskalna iela 23",pilseta:"Rīga",indekss:"LV-1048",sedr:true,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-489/2024",piet:"A-2024-066",stat:"Aktīvs"},
+  {pkods:"250101-21234",uzv:"VILCIŅA",vard:"MARTA ELĪNA",dzim:"25.01.2001",mir:"",sex:"S",idv:"LV",ident:"LV250101-21234",adrv:"LV",iela:"Rīgas iela 7",pilseta:"Jēkabpils",indekss:"LV-5201",sedr:false,seda:false,dz:"Jēkabpils",tau:"Latvija",lieta:"L-603/2024",piet:"D-2024-031",stat:"Aktīvs"},
+  {pkods:"060975-10890",uzv:"SONDORS",vard:"ULDIS",dzim:"06.09.1975",mir:"",sex:"V",idv:"LV",ident:"LV060975-10890",adrv:"SE",iela:"Drottninggatan 18",pilseta:"Stockholm",indekss:"111 51",sedr:false,seda:true,dz:"Ventspils",tau:"Latvija",lieta:"L-744/2023",piet:"C-2023-088",stat:"Aktīvs"},
+  {pkods:"140382-20456",uzv:"CELMIŅA",vard:"DACE INGRĪDA",dzim:"14.03.1982",mir:"",sex:"S",idv:"LV",ident:"LV140382-20456",adrv:"LV",iela:"Tallinas iela 14-6",pilseta:"Rīga",indekss:"LV-1010",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-288/2024",piet:"B-2024-044",stat:"Aktīvs"},
+  {pkods:"310768-11023",uzv:"KALĒJS",vard:"VIESTURS",dzim:"31.07.1968",mir:"",sex:"V",idv:"LV",ident:"LV310768-11023",adrv:"LV",iela:"Uzvaras iela 3",pilseta:"Bauska",indekss:"LV-3901",sedr:false,seda:false,dz:"Bauska",tau:"Latvija",lieta:"L-911/2022",piet:"A-2022-200",stat:"Aktīvs"},
+  {pkods:"020594-22789",uzv:"STRAZDIŅA",vard:"EVITA",dzim:"02.05.1994",mir:"",sex:"S",idv:"LV",ident:"LV020594-22789",adrv:"NO",iela:"Karl Johans gate 1",pilseta:"Oslo",indekss:"0154",sedr:true,seda:true,dz:"Sigulda",tau:"Latvija",lieta:"L-122/2024",piet:"E-2024-012",stat:"Aktīvs"},
+  {pkods:"170879-10345",uzv:"LIEĢIS",vard:"EDGARS",dzim:"17.08.1979",mir:"",sex:"V",idv:"LV",ident:"LV170879-10345",adrv:"LV",iela:"Brīvības iela 8",pilseta:"Dobele",indekss:"LV-3701",sedr:false,seda:false,dz:"Dobele",tau:"Latvija",lieta:"L-399/2023",piet:"B-2023-120",stat:"Aktīvs"},
+  {pkods:"250676-20988",uzv:"ROZENTĀLE",vard:"LIGA",dzim:"25.06.1976",mir:"",sex:"S",idv:"LV",ident:"LV250676-20988",adrv:"LV",iela:"Elizabetes iela 22-4",pilseta:"Rīga",indekss:"LV-1010",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-077/2024",piet:"A-2024-099",stat:"Aktīvs"},
+  {pkods:"091091-11567",uzv:"APINIS",vard:"GATIS",dzim:"09.10.1991",mir:"",sex:"V",idv:"LV",ident:"LV091091-11567",adrv:"LV",iela:"Meža iela 5",pilseta:"Ogre",indekss:"LV-5001",sedr:false,seda:false,dz:"Ogre",tau:"Latvija",lieta:"L-534/2024",piet:"C-2024-055",stat:"Aktīvs"},
+  {pkods:"150563-10012",uzv:"GRĪNBERGS",vard:"LEONĪDS",dzim:"15.05.1963",mir:"",sex:"V",idv:"LV",ident:"LV150563-10012",adrv:"LV",iela:"Valdemāra iela 67",pilseta:"Rīga",indekss:"LV-1013",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-200/2022",piet:"A-2022-044",stat:"Aktīvs"},
+  {pkods:"040289-21901",uzv:"ĀBOLTIŅA",vard:"SARMĪTE",dzim:"04.02.1989",mir:"",sex:"S",idv:"LV",ident:"LV040289-21901",adrv:"FI",iela:"Mannerheimintie 12",pilseta:"Helsinki",indekss:"00100",sedr:false,seda:true,dz:"Cēsis",tau:"Latvija",lieta:"L-655/2023",piet:"C-2023-040",stat:"Aktīvs"},
+  {pkods:"280171-10678",uzv:"VECKĀGANS",vard:"JĀNIS PĒTERIS",dzim:"28.01.1971",mir:"",sex:"V",idv:"LV",ident:"LV280171-10678",adrv:"LV",iela:"Pilsētas laukums 1",pilseta:"Kuldīga",indekss:"LV-3301",sedr:true,seda:false,dz:"Kuldīga",tau:"Latvija",lieta:"L-308/2024",piet:"B-2024-067",stat:"Aktīvs"},
+  {pkods:"190998-21123",uzv:"OZOLIŅA",vard:"RŪTA",dzim:"19.09.1998",mir:"",sex:"S",idv:"LV",ident:"LV190998-21123",adrv:"LV",iela:"Akadēmijas iela 19",pilseta:"Jelgava",indekss:"LV-3001",sedr:false,seda:false,dz:"Jelgava",tau:"Latvija",lieta:"L-412/2024",piet:"D-2024-041",stat:"Aktīvs"},
+  {pkods:"230861-10456",uzv:"LAZDIŅŠ",vard:"IMANTS",dzim:"23.08.1961",mir:"30.04.2020",sex:"V",idv:"LV",ident:"LV230861-10456",adrv:"LV",iela:"Lielā iela 9",pilseta:"Ventspils",indekss:"LV-3601",sedr:false,seda:false,dz:"Ventspils",tau:"Latvija",lieta:"L-099/2020",piet:"A-2020-033",stat:"Slēgts"},
+  {pkods:"110387-22034",uzv:"GRĀVERE",vard:"ANITA SANDRA",dzim:"11.03.1987",mir:"",sex:"S",idv:"LV",ident:"LV110387-22034",adrv:"LV",iela:"Ķīpsalas iela 8-2",pilseta:"Rīga",indekss:"LV-1048",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-741/2024",piet:"A-2024-111",stat:"Aktīvs"},
+  {pkods:"070477-10901",uzv:"BRAUNS",vard:"HARIJS",dzim:"07.04.1977",mir:"",sex:"V",idv:"LV",ident:"LV070477-10901",adrv:"GB",iela:"Oxford Street 100",pilseta:"London",indekss:"W1D 1LL",sedr:false,seda:true,dz:"Rīga",tau:"Latvija",lieta:"L-188/2023",piet:"C-2023-018",stat:"Aktīvs"},
+  {pkods:"021202-21567",uzv:"TIMMA",vard:"KRISTAPS",dzim:"02.12.2002",mir:"",sex:"V",idv:"LV",ident:"LV021202-21567",adrv:"LV",iela:"Sporta iela 2",pilseta:"Rīga",indekss:"LV-1013",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-920/2024",piet:"E-2024-020",stat:"Aktīvs"},
+  {pkods:"160584-11234",uzv:"HANSONS",vard:"UĢIS",dzim:"16.05.1984",mir:"",sex:"V",idv:"LV",ident:"LV160584-11234",adrv:"LV",iela:"Miera iela 12",pilseta:"Salaspils",indekss:"LV-2121",sedr:false,seda:false,dz:"Salaspils",tau:"Latvija",lieta:"L-667/2023",piet:"B-2023-088",stat:"Aktīvs"},
+  {pkods:"250369-20123",uzv:"KĻAVIŅA",vard:"MĀRA",dzim:"25.03.1969",mir:"",sex:"S",idv:"LV",ident:"LV250369-20123",adrv:"LV",iela:"Rīgas iela 88",pilseta:"Daugavpils",indekss:"LV-5404",sedr:true,seda:false,dz:"Daugavpils",tau:"Latvija",lieta:"L-230/2024",piet:"A-2024-130",stat:"Aktīvs"},
+  {pkods:"130895-11789",uzv:"LĀCIS",vard:"REINIS",dzim:"13.08.1995",mir:"",sex:"V",idv:"LV",ident:"LV130895-11789",adrv:"LV",iela:"Āzenes iela 3",pilseta:"Rīga",indekss:"LV-1048",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-456/2023",piet:"B-2023-156",stat:"Aktīvs"},
+  {pkods:"200178-10234",uzv:"RUBENIS",vard:"NORMUNDS",dzim:"20.01.1978",mir:"",sex:"V",idv:"LV",ident:"LV200178-10234",adrv:"LV",iela:"Ganību dambis 5",pilseta:"Rīga",indekss:"LV-1045",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-344/2024",piet:"A-2024-155",stat:"Aktīvs"},
+  {pkods:"051092-21678",uzv:"BERNĀTE",vard:"ELĪNA",dzim:"05.10.1992",mir:"",sex:"S",idv:"LV",ident:"LV051092-21678",adrv:"LT",iela:"Gedimino pr. 15",pilseta:"Vilnius",indekss:"LT-01103",sedr:false,seda:true,dz:"Rīga",tau:"Latvija",lieta:"L-188/2024",piet:"C-2024-038",stat:"Aktīvs"},
+  {pkods:"170865-10567",uzv:"PLŪME",vard:"ANDRIS",dzim:"17.08.1965",mir:"",sex:"V",idv:"LV",ident:"LV170865-10567",adrv:"LV",iela:"Striķu iela 7",pilseta:"Saldus",indekss:"LV-3801",sedr:false,seda:false,dz:"Saldus",tau:"Latvija",lieta:"L-511/2022",piet:"A-2022-177",stat:"Aktīvs"},
+  {pkods:"020403-22890",uzv:"GAILE",vard:"LĀSMA",dzim:"02.04.2003",mir:"",sex:"S",idv:"LV",ident:"LV020403-22890",adrv:"LV",iela:"Meistaru iela 19",pilseta:"Rīga",indekss:"LV-1050",sedr:false,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-780/2024",piet:"D-2024-050",stat:"Aktīvs"},
+  {pkods:"110679-10789",uzv:"BALODIS",vard:"JĀNIS ULDIS",dzim:"11.06.1979",mir:"",sex:"V",idv:"LV",ident:"LV110679-10789",adrv:"LV",iela:"Daugavgrīvas iela 31",pilseta:"Rīga",indekss:"LV-1007",sedr:true,seda:false,dz:"Rīga",tau:"Latvija",lieta:"L-422/2024",piet:"B-2024-079",stat:"Aktīvs"},
+  {pkods:"290186-21345",uzv:"ĀBOLKALNE",vard:"VITA",dzim:"29.01.1986",mir:"",sex:"S",idv:"LV",ident:"LV290186-21345",adrv:"LV",iela:"Rīgas iela 2",pilseta:"Limbāži",indekss:"LV-4001",sedr:false,seda:false,dz:"Limbāži",tau:"Latvija",lieta:"L-614/2023",piet:"A-2023-199",stat:"Aktīvs"},
+  {pkods:"030574-10456",uzv:"ZELTKALNS",vard:"MĀRIS",dzim:"03.05.1974",mir:"",sex:"V",idv:"LV",ident:"LV030574-10456",adrv:"LV",iela:"Mellužu prospekts 22",pilseta:"Jūrmala",indekss:"LV-2016",sedr:false,seda:false,dz:"Jūrmala",tau:"Latvija",lieta:"L-055/2024",piet:"A-2024-178",stat:"Aktīvs"},
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────
@@ -329,7 +335,7 @@ function getIz(key) {
   return el ? el.checked : false;
 }
 
-const FIELD_KEYS = ['uzv','vard','dzim','mir','sex','idv','ident','adrv','adr'];
+const FIELD_KEYS = ['uzv','vard','dzim','mir','sex','idv','ident','adrv','iela','pilseta','indekss'];
 
 // ── SEARCH ────────────────────────────────────────────────────────────────
 function doSearch() {
@@ -347,9 +353,9 @@ function doSearch() {
       if (!vals[k] || !izs[k]) continue;
       const rv  = r[k] || '';
       const rn  = nrm(rv), vn = nrm(vals[k]);
-      if (k === 'uzv'  && !rn.startsWith(vn)) return false;
+      if (k === 'uzv' && !rn.startsWith(vn)) return false;
       if (['sex','idv','adrv','dzim','mir'].includes(k) && rn !== vn) return false;
-      if (!['uzv','sex','idv','adrv','dzim','mir'].includes(k) && !rn.includes(vn)) return false;
+      if (['vard','ident','iela','pilseta','indekss'].includes(k) && !rn.includes(vn)) return false;
     }
     return true;
   });
@@ -398,8 +404,10 @@ function renderTable() {
       {v:r.sex,   cls:''},
       {v:r.idv,   cls:''},
       {v:r.ident, cls:''},
-      {v:r.adrv,  cls:''},
-      {v:r.adr,   cls:''},
+      {v:r.adrv,     cls:''},
+      {v:r.iela,    cls:''},
+      {v:r.pilseta, cls:''},
+      {v:r.indekss, cls:''},
       {cb:true, val:r.sedr},
       {cb:true, val:r.seda},
     ];
@@ -436,7 +444,7 @@ function selectRow(r) {
   const piesStr   = piesaistiti.has(r.pkods) ? ' <span style="color:#008000">✓ Piesaistīts</span>' : '';
   document.getElementById('expandedContent').innerHTML =
     `<b>${r.uzv} ${r.vard}</b> &nbsp;|&nbsp; Personas kods: <b>${r.pkods}</b> &nbsp;|&nbsp; Dzimšanas vieta: ${r.dz} &nbsp;|&nbsp; Valstpiederība: ${r.tau}<br>
-Adrese: ${r.adr} &nbsp;|&nbsp; Lietas Nr.: <b>${r.lieta}</b> &nbsp;|&nbsp; Pieteikums: ${r.piet} &nbsp;|&nbsp; Statuss: <b style="color:${statColor}">${r.stat}</b>${piesStr}`;
+${r.iela}, ${r.pilseta} &nbsp;|&nbsp; Lietas Nr.: <b>${r.lieta}</b> &nbsp;|&nbsp; Pieteikums: ${r.piet} &nbsp;|&nbsp; Statuss: <b style="color:${statColor}">${r.stat}</b>${piesStr}`;
 
   const statusSel = document.getElementById('statusSel');
   statusSel.style.display = '';
@@ -467,7 +475,9 @@ function openAdrese() {
   document.getElementById('bodyAdrese').innerHTML = `<table class="dtbl">
     ${dRow('Personas kods', r.pkods)}
     ${dRow('Vārds, Uzvārds', r.vard + ' ' + r.uzv)}
-    ${dRowPlain('Adrese', r.adr)}
+    ${dRowPlain('Iela, mājas Nr.', r.iela)}
+    ${dRowPlain('Pilsēta / pagasts, novads', r.pilseta)}
+    ${dRowPlain('Pasta indekss', r.indekss || '—')}
     ${dRowPlain('Adreses valsts kods', r.adrv)}
     ${dRowPlain('SED personu radniecība', r.sedr ? '✓ Jā' : 'Nē')}
     ${dRowPlain('SED personu adrese', r.seda ? '✓ Jā' : 'Nē')}
@@ -489,7 +499,9 @@ function openPersonas() {
     ${dRowPlain('ID koda valsts', r.idv)}
     ${dRow('Identifikācijas kods', r.ident)}
     ${dRowPlain('Adreses valsts kods', r.adrv)}
-    ${dRowPlain('Adrese', r.adr)}
+    ${dRowPlain('Iela, mājas Nr.', r.iela)}
+    ${dRowPlain('Pilsēta / pagasts, novads', r.pilseta)}
+    ${dRowPlain('Pasta indekss', r.indekss || '—')}
     ${dRow('Lietas Nr.', r.lieta)}
     ${dRowPlain('Pieteikuma Nr.', r.piet)}
     <tr><td style="color:#555;width:170px">Statuss:</td><td><b style="color:${statColor}">${r.stat}</b></td></tr>
@@ -545,7 +557,7 @@ document.getElementById('cb_all').addEventListener('change', function() {
 });
 
 // Enter key triggers search
-document.querySelectorAll('#f_uzv,#f_vard,#f_dzim,#f_mir,#f_ident,#f_adr').forEach(el => {
+document.querySelectorAll('#f_uzv,#f_vard,#f_dzim,#f_mir,#f_ident,#f_iela,#f_pilseta,#f_indekss').forEach(el => {
   el.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 });
 
