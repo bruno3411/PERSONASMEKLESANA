@@ -5,69 +5,79 @@
 <title>Meklēt personu SAIS</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;font-size:11px;background:#d4d0c8;color:#000;min-width:900px;user-select:none}
+body{font-family:"Tahoma","Segoe UI",Arial,sans-serif;-webkit-font-smoothing:none;font-size:11px;background:#f5f5f5;color:#1a1c1b;min-width:900px;user-select:none}
 
 /* Title bar */
-#titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;font-size:12px;font-weight:bold;padding:3px 8px;display:flex;justify-content:space-between;align-items:center;height:22px}
+#titlebar{background:#1c4c5c;color:#bcd8e4;font-size:12px;font-weight:bold;padding:3px 8px 4px 8px;display:flex;justify-content:space-between;align-items:center;height:26px}
 
-/* Win98 panel */
-.win{margin:4px;border:2px solid #fff;border-right-color:#808080;border-bottom-color:#808080;padding:5px}
-.panel{border:2px solid #fff;border-right-color:#808080;border-bottom-color:#808080;padding:6px 8px 8px;margin-bottom:6px;transition:border-color .2s,box-shadow .2s}
-.panel-title{font-weight:bold;font-size:11px;margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+/* Window / panel */
+.win{margin:4px;background:#ccd4d2;border:1px solid #8aacaa;border-radius:4px;padding:6px}
+.panel{border:1px solid #8aacaa;border-radius:3px;background:#ccd4d2;padding:6px 8px 8px;margin-bottom:6px;transition:border-color .2s,box-shadow .2s}
+.panel-title{font-weight:bold;font-size:11px;margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#1c4c5c}
 
 /* Buttons */
-button{background:#d4d0c8;border:2px solid #fff;border-right-color:#808080;border-bottom-color:#808080;font-size:11px;font-family:Arial,Helvetica,sans-serif;padding:2px 10px;cursor:pointer;min-height:23px;white-space:nowrap;color:#000}
-button:active:not(:disabled){border-color:#808080;border-right-color:#fff;border-bottom-color:#fff;padding:3px 9px 1px 11px}
-button:disabled{color:#808080;cursor:default}
+button{height:26px;background:#c4c8c6;border:2px solid;border-color:#e2e6e4 #8c9290 #8c9290 #e2e6e4;box-shadow:inset 1px 1px 0 #eef2f0;font-size:11px;font-weight:bold;font-family:inherit;color:#1a1c1b;border-radius:3px;padding:0 12px;cursor:pointer;min-height:26px;white-space:nowrap;transition:background .1s}
+button:hover:not(:disabled){background:#cacece}
+button:active:not(:disabled){border-color:#8c9290 #e2e6e4 #e2e6e4 #8c9290;box-shadow:none}
+button:disabled{background:#c0c4c2;border:2px solid #b2b6b4;color:#929890;cursor:default;text-shadow:1px 1px 0 #eef0ef;box-shadow:none}
 
 /* Inputs & selects */
-input[type=text],select{height:22px;font-size:11px;font-family:Arial,Helvetica,sans-serif;padding:1px 3px;width:100%;box-sizing:border-box;background:#fff;border:1px solid #808080;border-top-color:#404040;border-left-color:#404040;outline:none}
+input[type=text],select{height:26px;font-size:11px;font-family:inherit;padding:0 5px;width:100%;box-sizing:border-box;background:#ffffff;border:1px solid #7eaeac;border-radius:3px;box-shadow:inset 0 1px 2px rgba(0,0,0,.06);outline:none;color:#1a1c1b;cursor:text;transition:background .08s,border-color .08s}
+input[type=text]:focus,select:focus{border-color:#4a8a88;box-shadow:inset 0 1px 2px rgba(0,60,60,.1)}
+select{cursor:pointer}
 input[type=checkbox]{cursor:pointer;width:13px;height:13px}
 
 /* Criteria grid — 15 columns matching the table */
 .crit-grid{display:grid;grid-template-columns:70px 1fr 1fr 1fr 80px 70px 60px 60px 1.2fr 56px 1.4fr 1fr 68px 50px 44px;column-gap:2px;align-items:end}
-.crit-hdr{font-size:10px;line-height:1.15;text-align:center;padding-bottom:2px;word-break:break-word}
+.crit-hdr{font-size:10px;line-height:1.15;text-align:center;padding-bottom:2px;word-break:break-word;color:#1a1c1b}
 .crit-hdr.left{text-align:left}
 .crit-cb{display:flex;justify-content:center;align-items:center;padding-top:2px}
-.gray-gap{background:#d4d0c8}
+.gray-gap{background:transparent}
 
 /* Table */
-.res-wrap{border:2px inset #808080;overflow-y:auto;overflow-x:hidden;height:242px;background:#d4d0c8}
-table.res{width:100%;border-collapse:collapse;table-layout:fixed}
-table.res thead th{font-size:10px;font-weight:normal;text-align:left;padding:1px 2px;vertical-align:bottom;line-height:1.15;word-break:break-word;background:#d4d0c8;position:sticky;top:0;z-index:1}
-table.res tbody td{background:#fff;border:1px solid #78b8b8;height:18px;padding:0 2px;overflow:hidden;white-space:nowrap;cursor:pointer}
-table.res tbody td.gray{background:#c8c8c8}
-table.res tbody td.cb-cell{background:#d4d0c8;border:none;text-align:center;vertical-align:middle}
-table.res tbody tr:hover td:not(.cb-cell){background:#dde8ff}
-table.res tbody tr.sel td:not(.cb-cell){background:#000080;color:#fff}
-table.res tbody tr.sel td.gray{background:#000060}
-table.res tbody tr.sel:hover td:not(.cb-cell){background:#0000aa}
+.res-wrap{border:1px solid #8aacaa;border-radius:3px;overflow-y:auto;overflow-x:hidden;height:242px;background:#e8ecea}
+table.res{width:100%;border-collapse:separate;border-spacing:2px;table-layout:fixed}
+table.res thead th{font-size:10px;font-weight:bold;text-align:left;padding:3px 4px;vertical-align:bottom;line-height:1.15;word-break:break-word;background:#ccd4d2;position:sticky;top:0;z-index:1;color:#1a1c1b}
+table.res tbody td{background:#e8ecea;border:1px solid #7eaeac;border-radius:3px;height:22px;padding:0 4px;overflow:hidden;white-space:nowrap;cursor:pointer;box-shadow:inset 0 1px 2px rgba(0,0,0,.06);color:#1a1c1b;transition:background .08s,border-color .08s}
+table.res tbody tr:nth-child(even) td{background:#dde8e6}
+table.res tbody td.gray{background:#c8d0ce}
+table.res tbody td.cb-cell{background:transparent;border:none;box-shadow:none;text-align:center;vertical-align:middle}
+table.res tbody tr:hover td:not(.cb-cell){background:#c6e2e0;border-color:#5a9896}
+table.res tbody tr.sel td:not(.cb-cell){background:#0f8a92;color:#fff;border-color:#0f8a92}
+table.res tbody tr.sel td.gray{background:#0b6d74}
+table.res tbody tr.sel:hover td:not(.cb-cell){background:#14a1aa}
 
 /* Expanded */
-fieldset.expanded{border:1px solid #808080;padding:4px 6px;margin-top:5px}
-fieldset.expanded legend{font-size:11px;padding:0 4px}
-#expandedContent{min-height:52px;font-size:11px;line-height:1.5}
+fieldset.expanded{border:1px solid #8aacaa;border-radius:3px;padding:4px 6px;margin-top:5px;background:#ccd4d2}
+fieldset.expanded legend{font-size:11px;padding:0 4px;font-weight:bold;font-style:italic;color:#1a1c1b;background:#ccd4d2}
+#expandedContent{min-height:52px;font-size:11px;line-height:1.5;color:#1a1c1b}
 
 /* Bottom bar */
 .bottom-bar{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
 .btn-group{display:flex;gap:4px}
 
 /* Status bar */
-#statusbar{background:#d4d0c8;border-top:1px solid #808080;padding:2px 8px;font-size:10px;color:#444;display:flex;gap:0}
-.status-sep{border-left:1px solid #808080;margin-left:10px;padding-left:10px}
+#statusbar{background:#ccd4d2;border-top:1px solid #8aacaa;padding:2px 8px;font-size:10.5px;color:#1a1c1b;display:flex;gap:0}
+.status-sep{border-left:1px solid #8aacaa;margin-left:10px;padding-left:10px}
 
 /* Modal */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;justify-content:center;align-items:center}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;justify-content:center;align-items:center}
 .overlay.show{display:flex}
-.modal{background:#d4d0c8;border:2px solid #fff;border-right-color:#808080;border-bottom-color:#808080;min-width:360px;max-width:520px;font-family:Arial,Helvetica,sans-serif}
-.modal-title{background:linear-gradient(to right,#000080,#1084d0);color:#fff;font-weight:bold;font-size:11px;padding:3px 8px}
-.modal-body{padding:12px 16px;font-size:11px;line-height:1.7}
-.modal-foot{padding:6px 12px;display:flex;justify-content:flex-end;gap:6px}
+.modal{background:#ccd4d2;border:1px solid #8aacaa;border-radius:4px;min-width:360px;max-width:520px;font-family:inherit}
+.modal-title{background:#1c4c5c;color:#bcd8e4;font-weight:bold;font-size:11px;padding:3px 8px 4px}
+.modal-body{padding:14px;font-size:11px;line-height:1.7;color:#1a1c1b}
+.modal-foot{padding:8px 12px;display:flex;justify-content:flex-end;gap:6px;border-top:1px solid #8aacaa}
 table.dtbl td{padding:2px 10px 2px 0;vertical-align:top}
-table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
+table.dtbl td:first-child{color:#3a5a58;width:170px;white-space:nowrap}
 
 /* No results message */
-#noResults{display:none;padding:8px;color:#666;font-style:italic;background:#d4d0c8}
+#noResults{display:none;padding:8px;color:#4a6a68;font-style:italic;background:#e8ecea}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:16px;height:16px}
+::-webkit-scrollbar-track{background:#a6b6b4}
+::-webkit-scrollbar-thumb{background:#c8cecc;border:1px solid;border-color:#dce0de #8c9290 #8c9290 #dce0de;border-radius:2px}
+::-webkit-scrollbar-button{background:#ccd4d2;border:1px solid;border-color:#dce0de #8c9290 #8c9290 #dce0de;height:16px;border-radius:2px}
 </style>
 </head>
 <body>
@@ -81,7 +91,7 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
 <div class="win">
 
   <!-- SEARCH PANEL -->
-  <div class="panel" id="searchPanel" style="background:#d4d0c8">
+  <div class="panel" id="searchPanel" style="background:#ccd4d2">
     <div class="panel-title">
       <span>Identificējamās personas dati</span>
     </div>
@@ -172,7 +182,7 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
   </div>
 
   <!-- RESULTS PANEL -->
-  <div class="panel panel-none" style="background:#d4d0c8">
+  <div class="panel panel-none" style="background:#ccd4d2">
     <div class="panel-title">
       Meklēšanas rezultāti
       <span id="resultCount" style="font-weight:normal;font-size:10px;color:#555"></span>
