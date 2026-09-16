@@ -24,8 +24,8 @@ button:disabled{color:#808080;cursor:default}
 input[type=text],select{height:22px;font-size:11px;font-family:Arial,Helvetica,sans-serif;padding:1px 3px;width:100%;box-sizing:border-box;background:#fff;border:1px solid #808080;border-top-color:#404040;border-left-color:#404040;outline:none}
 input[type=checkbox]{cursor:pointer;width:13px;height:13px}
 
-/* Criteria grid — 12 columns matching the table */
-.crit-grid{display:grid;grid-template-columns:70px 1fr 1fr 80px 70px 60px 60px 1.2fr 56px 1.4fr 1fr 68px 50px 44px;column-gap:2px;align-items:end}
+/* Criteria grid — 15 columns matching the table */
+.crit-grid{display:grid;grid-template-columns:70px 1fr 1fr 1fr 80px 70px 60px 60px 1.2fr 56px 1.4fr 1fr 68px 50px 44px;column-gap:2px;align-items:end}
 .crit-hdr{font-size:10px;line-height:1.15;text-align:center;padding-bottom:2px;word-break:break-word}
 .crit-hdr.left{text-align:left}
 .crit-cb{display:flex;justify-content:center;align-items:center;padding-top:2px}
@@ -90,7 +90,8 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
     <div class="crit-grid">
       <div class="gray-gap"></div>
       <div class="crit-hdr">Uzvārds (transliterācijā)</div>
-      <div class="crit-hdr">Vārds (i) (transliterācijā)</div>
+      <div class="crit-hdr">Vārds (transliterācijā)</div>
+      <div class="crit-hdr">Otrs vārds (transliterācijā)</div>
       <div class="crit-hdr">Dzimšanas datums</div>
       <div class="crit-hdr">Miršanas datums</div>
       <div class="crit-hdr">Dzimums</div>
@@ -109,6 +110,7 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
       <div class="gray-gap"></div>
       <div><input type="text" id="f_uzv"   autocomplete="off"></div>
       <div><input type="text" id="f_vard"  autocomplete="off"></div>
+      <div><input type="text" id="f_vard2" autocomplete="off"></div>
       <div><input type="text" id="f_dzim"  autocomplete="off" placeholder="DD.MM.GGGG"></div>
       <div><input type="text" id="f_mir"   autocomplete="off" placeholder="DD.MM.GGGG"></div>
       <div>
@@ -149,6 +151,7 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
       </div>
       <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="uzv" checked></div>
       <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="vard" checked></div>
+      <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="vard2"></div>
       <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="dzim"></div>
       <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="mir"></div>
       <div class="crit-cb"><input type="checkbox" class="iz-cb" data-key="sex"></div>
@@ -178,13 +181,13 @@ table.dtbl td:first-child{color:#555;width:170px;white-space:nowrap}
     <div class="res-wrap">
       <table class="res" id="resTable">
         <colgroup>
-          <col style="width:70px"><col style="width:12%"><col style="width:11%">
+          <col style="width:70px"><col style="width:12%"><col style="width:7%"><col style="width:7%">
           <col style="width:78px"><col style="width:72px"><col style="width:56px"><col style="width:56px">
           <col style="width:11%"><col style="width:54px"><col style="width:13%"><col style="width:11%"><col style="width:66px"><col style="width:48px"><col style="width:42px">
         </colgroup>
         <thead>
           <tr>
-            <th>Personas kods</th><th>Uzvārds</th><th>Vārds (i)</th>
+            <th>Personas kods</th><th>Uzvārds</th><th>Vārds</th><th>Otrs vārds</th>
             <th>Dzimšanas datums</th><th>Miršanas datums</th><th>Dzimums</th>
             <th>ID koda valsts</th><th>Identifikācijas kods</th>
             <th>Adreses valsts kods</th><th>Iela, mājas Nr.</th><th>Pilsēta / pagasts, novads</th><th>Pasta indekss</th>
@@ -325,6 +328,12 @@ let piesaistiti    = new Set();
 // ── NORMALIZE ─────────────────────────────────────────────────────────────
 const nrm = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 
+// ── SPLIT "Vārds (i)" INTO Vārds / Otrs vārds ──────────────────────────────
+// r.vard still holds the full given-name string (e.g. "ANNA MARIJA").
+// These helpers derive the first and second name from it on the fly.
+function vName(v)  { return (v || '').trim().split(/\s+/)[0] || ''; }
+function vName2(v) { const p = (v || '').trim().split(/\s+/); return p.length > 1 ? p.slice(1).join(' ') : ''; }
+
 // ── GET CURRENT FIELD VALUES ───────────────────────────────────────────────
 function getVal(id) {
   const el = document.getElementById(id);
@@ -335,7 +344,7 @@ function getIz(key) {
   return el ? el.checked : false;
 }
 
-const FIELD_KEYS = ['uzv','vard','dzim','mir','sex','idv','ident','adrv','iela','pilseta','indekss'];
+const FIELD_KEYS = ['uzv','vard','vard2','dzim','mir','sex','idv','ident','adrv','iela','pilseta','indekss'];
 
 // ── SEARCH ────────────────────────────────────────────────────────────────
 function doSearch() {
@@ -351,11 +360,14 @@ function doSearch() {
     if (!hasCrit) return true;
     for (const k of FIELD_KEYS) {
       if (!vals[k] || !izs[k]) continue;
-      const rv  = r[k] || '';
+      let rv;
+      if (k === 'vard') rv = vName(r.vard);
+      else if (k === 'vard2') rv = vName2(r.vard);
+      else rv = r[k] || '';
       const rn  = nrm(rv), vn = nrm(vals[k]);
       if (k === 'uzv' && !rn.startsWith(vn)) return false;
       if (['sex','idv','adrv','dzim','mir'].includes(k) && rn !== vn) return false;
-      if (['vard','ident','iela','pilseta','indekss'].includes(k) && !rn.includes(vn)) return false;
+      if (['vard','vard2','ident','iela','pilseta','indekss'].includes(k) && !rn.includes(vn)) return false;
     }
     return true;
   });
@@ -398,7 +410,8 @@ function renderTable() {
     const cells = [
       {v:r.pkods, cls:''},
       {v:r.uzv,   cls:''},
-      {v:r.vard,  cls:''},
+      {v:vName(r.vard),  cls:''},
+      {v:vName2(r.vard), cls:''},
       {v:r.dzim,  cls:''},
       {v:r.mir,   cls:''},
       {v:r.sex,   cls:''},
@@ -557,7 +570,7 @@ document.getElementById('cb_all').addEventListener('change', function() {
 });
 
 // Enter key triggers search
-document.querySelectorAll('#f_uzv,#f_vard,#f_dzim,#f_mir,#f_ident,#f_iela,#f_pilseta,#f_indekss').forEach(el => {
+document.querySelectorAll('#f_uzv,#f_vard,#f_vard2,#f_dzim,#f_mir,#f_ident,#f_iela,#f_pilseta,#f_indekss').forEach(el => {
   el.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 });
 
